@@ -1,0 +1,116 @@
+// ============================================================================
+// testbench_try_solution.v
+//
+// Drives ONE candidate input sequence you've worked out yourself against our
+// reconstructed netlist, following the real timing protocol confirmed from
+// the reference trace (enable held high for ~121 cycles while I is driven
+// bit-by-bit, then enable dropped to read the result). Reports whether
+// `success` ever goes high, and prints the O_0_..O_7_ output each cycle so
+// you can see the response as it happens.
+//
+// EDIT THE `candidate` ARRAY BELOW with your own deduced input bits.
+// Nothing in this file encodes or assumes any particular answer -- you
+// supply the sequence, this just runs it and reports the result.
+// ============================================================================
+
+`timescale 1ps/1ps
+
+module testbench_try_solution;
+
+    parameter CLK_PERIOD    = 10000;  // ps, matches confirmed reference timing
+    parameter ENABLE_CYCLES = 121;    // confirmed from the reference trace
+    parameter SETTLE_CYCLES = 5;      // cycles to wait after enable drops before reporting
+
+    reg clk, rst_n, enable, I;
+    wire O_0_, O_1_, O_2_, O_3_, O_4_, O_5_, O_6_, O_7_, success;
+    wire [7:0] output_hex = {O_7_, O_6_, O_5_, O_4_, O_3_, O_2_, O_1_, O_0_};
+
+    reg success_seen;
+    integer success_time;
+    integer i;
+
+    // ------------------------------------------------------------------
+    // YOUR CANDIDATE INPUT SEQUENCE -- one bit per clock cycle, in order.
+    // Must have exactly ENABLE_CYCLES entries. Pad the tail with 0s if
+    // your deduced sequence is shorter than the full window.
+    // ------------------------------------------------------------------
+    reg candidate [0:120];
+    initial begin
+        for (i = 0; i <= 120; i = i + 1)
+            candidate[i] = 1'b0;   // <-- default fill, overwrite below
+
+        // Example: set specific bits like this (index 0 = first cycle
+        // after enable goes high). Replace with your own sequence.
+        // candidate[0]  = 1'b1;
+        // candidate[1]  = 1'b0;
+        // candidate[2]  = 1'b1;
+        // ...
+    end
+
+    JaneStreet dut (
+        .I       (I),
+        .clk     (clk),
+        .enable  (enable),
+        .rst_n   (rst_n),
+        .O_0_    (O_0_), .O_1_ (O_1_), .O_2_ (O_2_), .O_3_ (O_3_),
+        .O_4_    (O_4_), .O_5_ (O_5_), .O_6_ (O_6_), .O_7_ (O_7_)
+    );
+
+    initial clk = 0;
+    always #(CLK_PERIOD/2) clk = ~clk;
+
+    initial begin
+        $dumpfile("try_solution.vcd");
+        $dumpvars(0, testbench_try_solution);
+    end
+
+    always @(posedge clk) begin
+        $display("t=%0t  rst_n=%b enable=%b I=%b  ->  O=0x%02h  success=%b",
+                   $time, rst_n, enable, I, output_hex, success);
+        if (success === 1'b1 && !success_seen) begin
+            success_seen = 1'b1;
+            success_time = $time;
+            $display(">>> SUCCESS asserted at t=%0t <<<", $time);
+        end
+    end
+
+    initial begin
+        success_seen = 1'b0;
+
+        // Reset
+        rst_n  = 1'b0;
+        enable = 1'b0;
+        I      = 1'b0;
+        repeat (3) @(negedge clk);
+        rst_n = 1'b1;
+        @(negedge clk);
+
+        // Drive the candidate sequence for ENABLE_CYCLES cycles
+        enable = 1'b1;
+        for (i = 0; i < ENABLE_CYCLES; i = i + 1) begin
+            @(negedge clk);
+            I = candidate[i];
+        end
+
+        // Drop enable, let the result settle
+        enable = 1'b0;
+        repeat (SETTLE_CYCLES) @(negedge clk);
+
+        $display("=== Run complete ===");
+        $display("Final output_hex = 0x%02h", output_hex);
+        if (success_seen)
+            $display(">>> RESULT: success went HIGH at t=%0d <<<", success_time);
+        else
+            $display(">>> RESULT: success never asserted during this run <<<");
+
+        $finish;
+    end
+
+    // Safety timeout
+    initial begin
+        #((ENABLE_CYCLES + SETTLE_CYCLES + 20) * CLK_PERIOD);
+        $display("TIMEOUT -- run did not finish in time");
+        $finish;
+    end
+
+endmodule
