@@ -2,27 +2,26 @@
 // Instantiates real sky130_fd_sc_hd logic/storage cells only
 // (vias, taps, fill, decap cells filtered out)
 
-module puzzle (
-    // TODO: list your real top-level ports here
-    // (input/output pins that connect off-chip)
+module JaneStreet (
+    input  I, 
+	input  VGND,
+    input  VPWR,
+    input  clk,
+    input  enable,
+ 	input  rst_n,
+	 
+	output O_0_, 
+	output O_1_, 
+	output O_2_, 
+	output O_3_,
+    output O_4_,
+    output O_5_,
+    output O_6_,
+    output O_7_,
+    output success
 );
 
-    wire I,
-         O_0_,
-         O_1_,
-         O_2_,
-         O_3_,
-         O_4_,
-         O_5_,
-         O_6_,
-         O_7_,
-         VGND,
-         VPWR,
-         clk,
-         enable,
- 	 rst_n,
-         success,
-         n__1,
+    wire n__1,
          n__1000,
          n__1006,
          n__101,
