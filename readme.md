@@ -51,8 +51,7 @@ See the full write-up for the boolean derivation of the `success` flip-flop, the
 ```
 .
 ├── docs/           # Write-up (PDF/markdown) and diagrams
-├── rtl/            # Hand-written Verilog modules for each standard cell + top-level netlist
-├── scripts/        # Python: GDS/netlist extraction, spatial clustering, SAT encoding
-├── testbench/      # ModelSim/Quartus testbenches, incl. the winning-sequence testbench
-└── solutions/      # Winning input sequence(s) and solver output
+├── rtl/            # Verilog modules for each standard cell + top-level netlist
+├── python/         # Python: GDS/netlist extraction, spatial clustering, SAT encoding
+├── testbench/      # ModelSim/Quartus testbenches, incl. the winning sequence testbench
 ```
