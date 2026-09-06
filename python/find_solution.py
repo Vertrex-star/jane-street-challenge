@@ -1,34 +1,3 @@
-"""
-find_solution.py
-================
-Self-contained pipeline that finds an input sequence driving `success` high
-in JaneStreet, starting from nothing but the netlist file itself.
-
-Steps:
-  1. Parse every primitive gate instance in the netlist into one flat graph
-     (works because every cluster instantiation connects matching net names
-     on both sides, so the whole design behaves as one flat namespace for
-     signal-flow purposes).
-  2. Backward-trace from `success` to find its complete fan-in cone (which
-     gates actually influence it -- turns out to be ~467 of the design's
-     ~694 gates, entirely disjoint from the 5 clusters that produce the
-     character output).
-  3. Topologically sort that cone's combinational gates.
-  4. Unroll the whole cone across N clock cycles into one big CNF/SAT
-     formula: each cycle gets a fresh free variable for `I`, flip-flops
-     carry their value forward as literals (no new variables needed), and
-     the n__1029 feedback loop (confirmed to depend ONLY on cluster_success's
-     own outputs -- see and4bb_2 inst_297) is closed for real.
-  5. Ask the SAT solver: is there any I-sequence making `success` = 1 at
-     ANY point within N cycles? If SAT, extract the winning bit sequence
-     and report the earliest cycle it first goes high.
-
-Requires: pip install python-sat --break-system-packages
-
-Usage:
-    python3 find_solution.py JaneStreet_renamed.v
-"""
-
 import re
 import sys
 import time
