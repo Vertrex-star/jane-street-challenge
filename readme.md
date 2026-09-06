@@ -64,6 +64,4 @@ It's mostly a fun side project rather than something needed to solve the challen
 ├── testbench/      # ModelSim/Quartus testbenches, incl. the winning sequence testbench
 ```
 
-## License
 
-Add a license here if you'd like others to reuse the code (MIT is a common default for hobby projects like this).
