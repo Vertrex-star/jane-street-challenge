@@ -59,8 +59,8 @@ It's mostly a fun side project rather than something needed to solve the challen
 ```
 .
 ├── docs/           # Write-up (PDF/markdown) and diagrams
-├── rtl/            # Verilog modules for each standard cell + top-level netlist
-├── python/         # Python: GDS/netlist extraction, spatial clustering, SAT encoding
+├── python/            # Verilog modules for each standard cell + top-level netlist
+├── rtl/         # Python: GDS/netlist extraction, spatial clustering, SAT encoding
 ├── testbench/      # ModelSim/Quartus testbenches, incl. the winning sequence testbench
 ```
 
