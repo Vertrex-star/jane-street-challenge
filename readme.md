@@ -35,7 +35,7 @@ See the full write-up for the boolean derivation of the `success` flip-flop, the
 
 Since PCB design is what I actually spend most of my time on, I couldn't resist taking the warmup puzzle (the simpler circuit given as a reference before tackling the full ASIC) and building it out as a real hardware schematic rather than leaving it purely as a simulated netlist.
 
-The board is USB-C powered, stepping 5V down to 3.3V for the logic, with its own local clock oscillator generating the CLK signal for the design. Both input bit streams are shifted in through two banks of D-type shift registers, with an NPN transistor and pull-up resistor added on every stage so each bit in the shift chain can be probed and observed on real hardware rather than just in a simulator. Downstream of the shift registers sit a pair of adder ICs and a final AND/OR logic block that combines everything down into the single output pin, `F`, mirroring the comparator style logic that turned up in the ASIC's success path.
+The board is USB-C powered, stepping 5V down to 3.3V for the logic, with its own local clock oscillator generating the CLK signal for the design. Both input bit streams are shifted in through two banks of D type shift registers, with an NPN transistor and pull up resistor added on every stage so each bit in the shift chain can be probed and observed on real hardware rather than just in a simulator. Downstream of the shift registers sit a pair of adder ICs and a final AND/OR logic block that combines everything down into the single output pin, `F`, mirroring the comparator style logic that turned up in the ASIC's success path.
 
 It's mostly a fun side project rather than something needed to solve the challenge, but going from "here's a Verilog netlist that behaves this way" to "here's a schematic that would actually behave this way on copper" was a good excuse to sanity check my own understanding of the warmup logic.
 
@@ -49,8 +49,8 @@ It's mostly a fun side project rather than something needed to solve the challen
 
 ## Easter eggs
 
-- All-zero input → `EMPTY SKY`
-- All-one input → `BIG BANG`
+- All zero input → `EMPTY SKY`
+- All one input → `BIG BANG`
 - Invalid/incomplete input → `TRY AGN`
 - The date embedded in the puzzle corresponds to the 2016 UTC leap second.
 
