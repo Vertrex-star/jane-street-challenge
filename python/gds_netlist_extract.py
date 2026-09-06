@@ -1,28 +1,3 @@
-#!/usr/bin/env python3
-"""
-gds_netlist_extract.py  (improved)
-
-Extracts a GATE-LEVEL netlist from a placed-and-routed GDS built on the
-open-source SkyWater sky130 PDK.  Standard-cell instances are treated as
-opaque black boxes; only interconnect connectivity is recovered.
-
-Improvements over the original:
-  - Stable instance names of the form <cell>__x<XX.XX>_y<YY.YY>
-    (identical to those produced by the companion gds_spatial_clusters.py).
-  - Real top-level port list for the JaneStreet design (I, clk, enable,
-    rst_n, O_0_..O_7_, success) instead of a TODO placeholder.
-  - Optional --ports-file for other designs.
-  - Cleaner filtering of non-functional cells.
-
-Requires: pip install klayout --break-system-packages
-
-Usage:
-    python3 gds_netlist_extract.py design.gds --top TOP_CELL_NAME \
-        --verilog netlist.v --json netlist.json
-
-If you don't know the top cell name, run with --list-cells first.
-"""
-
 import argparse
 import json
 import re
