@@ -1,26 +1,3 @@
-#!/usr/bin/env python3
-"""
-gds_spatial_clusters.py  (improved)
-
-Extracts the physical (x, y) placement of every functional sky130_fd_sc_hd
-standard-cell instance from a GDS, then groups instances that sit close
-together on the die into spatial clusters -- no netlist connectivity
-involved, purely physical proximity.
-
-Stable instance names are generated as:
-    <cell>__x<XX.XX>_y<YY.YY>
-(with '.' replaced by 'p').  These names are identical to those produced
-by the companion improved gds_netlist_extract.py, giving a perfect 1-to-1
-mapping between clusters.json / instance_map.json and the Verilog netlist.
-
-Usage:
-    python3 gds_spatial_clusters.py design.gds --top TOP_CELL \
-        --threshold 5.0 --out clusters.json --map instance_map.json
-
-`--threshold` is in microns: any two instances whose centers are within
-this distance are linked into the same cluster.
-"""
-
 import argparse
 import json
 import re
